@@ -178,7 +178,7 @@ class Jetpack_Widget_Conditions {
 						<?php
 					}
 					
-					do_action( 'widget_conditions_after_admin_form', $instance, $return, $widget ); ?>
+					do_action( 'widget_conditions_after_admin_form', $instance, $return, $widget );
 
 					?>
 				</div><!-- .conditions -->
