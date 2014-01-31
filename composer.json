@@ -1,0 +1,20 @@
+{
+	"name"       : "cftp/widget-visibility-without-jetpack",
+	"description": "This plugin controls what pages your widgets appear on.",
+	"homepage"   : "https://github.com/cftp/widget-visibility-without-jetpack/",
+	"type"       : "wordpress-plugin",
+	"license"    : "GPL-2.0+",
+	"authors"    : [
+		{
+			"name"    : "Joan Boluda",
+			"homepage": "http://http://boluda.com//"
+		},
+		{
+			"name"    : "Code For The People",
+			"homepage": "http://codeforthepeople.com/"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0"
+	}
+}
