@@ -150,8 +150,8 @@ class Jetpack_Widget_Conditions {
 				</div><!-- .condition-top -->
 
 				<div class="conditions">
+					<?php do_action( 'widget_conditions_before_admin_form', $instance, $return, $widget ); ?>
 					<?php
-
 					foreach ( $conditions['rules'] as $rule ) {
 						?>
 						<div class="condition">
@@ -177,6 +177,8 @@ class Jetpack_Widget_Conditions {
 						</div><!-- .condition -->
 						<?php
 					}
+					
+					do_action( 'widget_conditions_after_admin_form', $instance, $return, $widget ); ?>
 
 					?>
 				</div><!-- .conditions -->
@@ -197,6 +199,7 @@ class Jetpack_Widget_Conditions {
 		$conditions['action'] = $_POST['conditions']['action'];
 		$conditions['rules'] = array();
 
+		$conditions[ 'active' ] = false;
 		foreach ( $_POST['conditions']['rules_major'] as $index => $major_rule ) {
 			if ( ! $major_rule )
 				continue;
@@ -205,9 +208,13 @@ class Jetpack_Widget_Conditions {
 				'major' => $major_rule,
 				'minor' => isset( $_POST['conditions']['rules_minor'][$index] ) ? $_POST['conditions']['rules_minor'][$index] : ''
 			);
+
+			$conditions[ 'active' ] = true;
 		}
 
-		if ( ! empty( $conditions['rules'] ) )
+		$conditions = apply_filters( 'widget_conditions_update', $conditions, $instance, $new_instance, $old_instance );
+
+		if ( $conditions[ 'active' ] )
 			$instance['conditions'] = $conditions;
 		else
 			unset( $instance['conditions'] );
@@ -271,9 +278,6 @@ class Jetpack_Widget_Conditions {
 	 */
 	public static function filter_widget( $instance ) {
 		global $post, $wp_query;
-
-		if ( empty( $instance['conditions'] ) || empty( $instance['conditions']['rules'] ) )
-			return $instance;
 
 		$condition_result = false;
 
@@ -364,6 +368,8 @@ class Jetpack_Widget_Conditions {
 			if ( $condition_result )
 				break;
 		}
+
+		apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
 
 		if ( ( 'show' == $instance['conditions']['action'] && ! $condition_result ) || ( 'hide' == $instance['conditions']['action'] && $condition_result ) )
 			return false;
