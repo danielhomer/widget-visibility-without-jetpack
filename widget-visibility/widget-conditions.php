@@ -354,6 +354,8 @@ class Jetpack_Widget_Conditions {
 						$condition_result = true;
 					else if ( is_singular() && $rule['minor'] && has_category( $rule['minor'] ) )
 						$condition_result = true;
+					else
+						$condition_result = false;
 				break;
 				case 'author':
 					if ( ! $rule['minor'] && is_author() )
