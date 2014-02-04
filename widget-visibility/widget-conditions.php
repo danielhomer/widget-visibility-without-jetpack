@@ -375,7 +375,10 @@ class Jetpack_Widget_Conditions {
 				break;
 		}
 
-		$condition_result = apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
+		// No point filtering if the condition is already false, we don't want someone
+		// to make it true again.
+		if ( $condition_result )
+			$condition_result = apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
 
 		if ( ( 'show' == $instance['conditions']['action'] && ! $condition_result ) || ( 'hide' == $instance['conditions']['action'] && $condition_result ) )
 			return false;
