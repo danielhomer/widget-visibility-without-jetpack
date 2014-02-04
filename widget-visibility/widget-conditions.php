@@ -366,6 +366,8 @@ class Jetpack_Widget_Conditions {
 						$condition_result = true;
 					else if ( is_singular() && $rule['minor'] && $rule['minor'] == $post->post_author )
 						$condition_result = true;
+					else
+						$condition_result = false;	
 				break;
 			}
 
