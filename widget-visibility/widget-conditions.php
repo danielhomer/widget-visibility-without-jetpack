@@ -371,7 +371,7 @@ class Jetpack_Widget_Conditions {
 				break;
 			}
 
-			if ( $condition_result )
+			if ( ! $condition_result )
 				break;
 		}
 
