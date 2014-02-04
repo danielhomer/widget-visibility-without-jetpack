@@ -279,7 +279,7 @@ class Jetpack_Widget_Conditions {
 	public static function filter_widget( $instance ) {
 		global $post, $wp_query;
 
-		$condition_result = false;
+		$condition_result = true;
 
 		foreach ( $instance['conditions']['rules'] as $rule ) {
 			switch ( $rule['major'] ) {
