@@ -281,98 +281,100 @@ class Jetpack_Widget_Conditions {
 
 		$condition_result = true;
 
-		foreach ( $instance['conditions']['rules'] as $rule ) {
-			switch ( $rule['major'] ) {
-				case 'date':
-					switch ( $rule['minor'] ) {
-						case '':
-							$condition_result = is_date();
-						break;
-						case 'month':
-							$condition_result = is_month();
-						break;
-						case 'day':
-							$condition_result = is_day();
-						break;
-						case 'year':
-							$condition_result = is_year();
-						break;
-					}
-				break;
-				case 'page':
-					// Previously hardcoded post type options.
-					if ( 'post' == $rule['minor'] )
-						$rule['minor'] = 'post_type-post';
-					else if ( ! $rule['minor'] )
-						$rule['minor'] = 'post_type-page';
+		if ( is_array( $instance['conditions']['rules'] ) ) {
+			foreach ( $instance['conditions']['rules'] as $rule ) {
+				switch ( $rule['major'] ) {
+					case 'date':
+						switch ( $rule['minor'] ) {
+							case '':
+								$condition_result = is_date();
+							break;
+							case 'month':
+								$condition_result = is_month();
+							break;
+							case 'day':
+								$condition_result = is_day();
+							break;
+							case 'year':
+								$condition_result = is_year();
+							break;
+						}
+					break;
+					case 'page':
+						// Previously hardcoded post type options.
+						if ( 'post' == $rule['minor'] )
+							$rule['minor'] = 'post_type-post';
+						else if ( ! $rule['minor'] )
+							$rule['minor'] = 'post_type-page';
 
-					switch ( $rule['minor'] ) {
-						case '404':
-							$condition_result = is_404();
-						break;
-						case 'search':
-							$condition_result = is_search();
-						break;
-						case 'archive':
-							$condition_result = is_archive();
-						break;
-						case 'posts':
-							$condition_result = $wp_query->is_posts_page;
-						break;
-						case 'home':
-							$condition_result = is_home();
-						break;
-						case 'front':
-							$condition_result = is_front_page();
-						break;
-						default:
-							if ( substr( $rule['minor'], 0, 10 ) == 'post_type-' )
-								$condition_result = is_singular( substr( $rule['minor'], 10 ) );
-							else {
-								// $rule['minor'] is a page ID
-								$condition_result = is_page( $rule['minor'] );
-							}
-						break;
-					}
-				break;
-				case 'tag':
-					if ( ! $rule['minor'] && is_tag() )
-						$condition_result = true;
-					else if ( is_singular() && $rule['minor'] && has_tag( $rule['minor'] ) )
-						$condition_result = true;
-					else {
-						$tag = get_tag( $rule['minor'] );
+						switch ( $rule['minor'] ) {
+							case '404':
+								$condition_result = is_404();
+							break;
+							case 'search':
+								$condition_result = is_search();
+							break;
+							case 'archive':
+								$condition_result = is_archive();
+							break;
+							case 'posts':
+								$condition_result = $wp_query->is_posts_page;
+							break;
+							case 'home':
+								$condition_result = is_home();
+							break;
+							case 'front':
+								$condition_result = is_front_page();
+							break;
+							default:
+								if ( substr( $rule['minor'], 0, 10 ) == 'post_type-' )
+									$condition_result = is_singular( substr( $rule['minor'], 10 ) );
+								else {
+									// $rule['minor'] is a page ID
+									$condition_result = is_page( $rule['minor'] );
+								}
+							break;
+						}
+					break;
+					case 'tag':
+						if ( ! $rule['minor'] && is_tag() )
+							$condition_result = true;
+						else if ( is_singular() && $rule['minor'] && has_tag( $rule['minor'] ) )
+							$condition_result = true;
+						else {
+							$tag = get_tag( $rule['minor'] );
 
-						if ( $tag && is_tag( $tag->slug ) )
+							if ( $tag && is_tag( $tag->slug ) )
+								$condition_result = true;
+							else
+								$condition_result = false;
+						}
+					break;
+					case 'category':
+						if ( ! $rule['minor'] && is_category() )
+							$condition_result = true;
+						else if ( is_category( $rule['minor'] ) )
+							$condition_result = true;
+						else if ( is_singular() && $rule['minor'] && has_category( $rule['minor'] ) )
 							$condition_result = true;
 						else
 							$condition_result = false;
-					}
-				break;
-				case 'category':
-					if ( ! $rule['minor'] && is_category() )
-						$condition_result = true;
-					else if ( is_category( $rule['minor'] ) )
-						$condition_result = true;
-					else if ( is_singular() && $rule['minor'] && has_category( $rule['minor'] ) )
-						$condition_result = true;
-					else
-						$condition_result = false;
-				break;
-				case 'author':
-					if ( ! $rule['minor'] && is_author() )
-						$condition_result = true;
-					else if ( $rule['minor'] && is_author( $rule['minor'] ) )
-						$condition_result = true;
-					else if ( is_singular() && $rule['minor'] && $rule['minor'] == $post->post_author )
-						$condition_result = true;
-					else
-						$condition_result = false;	
-				break;
-			}
+					break;
+					case 'author':
+						if ( ! $rule['minor'] && is_author() )
+							$condition_result = true;
+						else if ( $rule['minor'] && is_author( $rule['minor'] ) )
+							$condition_result = true;
+						else if ( is_singular() && $rule['minor'] && $rule['minor'] == $post->post_author )
+							$condition_result = true;
+						else
+							$condition_result = false;	
+					break;
+				}
 
-			if ( $condition_result )
-				break;
+				if ( $condition_result )
+					break;
+			}
 		}
 
 		// No point filtering if the condition is already false, we don't want someone
