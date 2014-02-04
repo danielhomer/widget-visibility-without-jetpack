@@ -345,6 +345,8 @@ class Jetpack_Widget_Conditions {
 
 						if ( $tag && is_tag( $tag->slug ) )
 							$condition_result = true;
+						else
+							$condition_result = false;
 					}
 				break;
 				case 'category':
