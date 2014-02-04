@@ -369,7 +369,7 @@ class Jetpack_Widget_Conditions {
 				break;
 		}
 
-		apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
+		$condition_result = apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
 
 		if ( ( 'show' == $instance['conditions']['action'] && ! $condition_result ) || ( 'hide' == $instance['conditions']['action'] && $condition_result ) )
 			return false;
