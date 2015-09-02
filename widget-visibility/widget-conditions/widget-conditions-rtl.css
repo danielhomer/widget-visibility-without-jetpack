@@ -46,7 +46,7 @@
 	margin-top: -20px;
 }
 .widget-conditional .selection {
-	margin-right: 70px;
+	margin-left: 70px;
 }
 .widget-conditional .conditions-rule-has-children {
 	display: block;
@@ -63,7 +63,7 @@
 }
 
 .wp-core-ui .button.display-options {
-	margin-right: 5px;
+	margin-left: 5px;
 }
 .wp-core-ui .button.display-options:hover {
 	text-decoration: none;
