@@ -248,7 +248,7 @@ class Jetpack_Widget_Conditions {
 
 				<div class="conditions">
 					<?php
-
+					do_action( 'widget_conditions_before_admin_form', $instance, $return, $widget );
 					foreach ( $conditions['rules'] as $rule ) {
 						?>
 						<div class="condition">
@@ -293,7 +293,7 @@ class Jetpack_Widget_Conditions {
 						</div><!-- .condition -->
 						<?php
 					}
-
+					do_action( 'widget_conditions_after_admin_form', $instance, $return, $widget );
 					?>
 				</div><!-- .conditions -->
 			</div><!-- .widget-conditional-inner -->
@@ -323,6 +323,8 @@ class Jetpack_Widget_Conditions {
 				'has_children' => isset( $_POST['conditions']['page_children'][$index] ) ? true : false,
 			);
 		}
+		$conditions = apply_filters( 'widget_conditions_update', $conditions, $instance, $new_instance, $old_instance );
+
 
 		if ( ! empty( $conditions['rules'] ) )
 			$instance['conditions'] = $conditions;
@@ -599,6 +601,12 @@ class Jetpack_Widget_Conditions {
 			if ( $condition_result )
 				break;
 		}
+		
+		// No point filtering if the condition is already false, we don't want someone
+		// to make it true again.
+		if ( $condition_result )
+			$condition_result = apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
+
 
 		if ( ( 'show' == $instance['conditions']['action'] && ! $condition_result ) || ( 'hide' == $instance['conditions']['action'] && $condition_result ) )
 			return false;
