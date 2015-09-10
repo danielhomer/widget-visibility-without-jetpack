@@ -437,7 +437,7 @@ class Jetpack_Widget_Conditions {
 	public static function filter_widget( $instance ) {
 		global $wp_query;
 
-		if ( empty( $instance['conditions'] ) || empty( $instance['conditions']['rules'] ) )
+		if ( empty( $instance['conditions'] ) || ( ! $instance['conditions']['type'] && empty( $instance['conditions']['rules'] ) ) )
 			return $instance;
 
 		// Store the results of all in-page condition lookups so that multiple widgets with
@@ -604,10 +604,7 @@ class Jetpack_Widget_Conditions {
 				break;
 		}
 
-		// No point filtering if the condition is already false, we don't want someone
-		// to make it true again.
-		if ( $condition_result )
-			$condition_result = apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
+		$condition_result = apply_filters( 'widget_conditions_condition_result', $condition_result, $instance );
 
 		if ( ( 'show' == $instance['conditions']['action'] && ! $condition_result ) || ( 'hide' == $instance['conditions']['action'] && $condition_result ) )
 			return false;
